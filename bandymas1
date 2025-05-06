@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    .question { font-size: 1.2em; margin-bottom: 10px; }
+    .choices button { display: block; margin: 5px 0; padding: 10px; width: 100%; }
+    .result { font-weight: bold; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>Quiz Time!</h1>
+<div id="quiz-container">
+  <div class="question" id="question"></div>
+  <div class="choices" id="choices"></div>
+  <div class="result" id="result"></div>
+  <button onclick="nextQuestion()">Next</button>
+</div>
+
+<script>
+const quiz = [
+  {
+    question: "What is the capital of France?",
+    choices: ["Berlin", "Madrid", "Paris", "Rome"],
+    answer: "Paris"
+  },
+  {
+    question: "2 + 2 equals?",
+    choices: ["3", "4", "5", "22"],
+    answer: "4"
+  }
+];
+
+let current = 0;
+let score = 0;
+
+function showQuestion() {
+  const q = quiz[current];
+  document.getElementById("question").textContent = q.question;
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = '';
+  q.choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.onclick = () => checkAnswer(choice);
+    choicesDiv.appendChild(btn);
+  });
+  document.getElementById("result").textContent = '';
+}
+
+function checkAnswer(choice) {
+  const correct = quiz[current].answer;
+  if (choice === correct) {
+    score++;
+    document.getElementById("result").textContent = "Correct!";
+  } else {
+    document.getElementById("result").textContent = `Wrong. Correct answer: ${correct}`;
+  }
+  // Disable all buttons
+  [...document.querySelectorAll("#choices button")].forEach(b => b.disabled = true);
+}
+
+function nextQuestion() {
+  current++;
+  if (current < quiz.length) {
+    showQuestion();
+  } else {
+    document.getElementById("quiz-container").innerHTML = `<h2>You scored ${score}/${quiz.length}</h2>`;
+  }
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
